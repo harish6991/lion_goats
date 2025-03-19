@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lions and goats</title>
+    <link rel="stylesheet" href="./styles/game_layout.css">
+</head>
+<body>
+    <main>
+        <div>
+          <center class="header_text">
+            <span class="fascinate-inline-regular">Tiger & Sheeps</span>
+          </center>
+        </div>
+
+        <div class="game-container">
+          <div class="menu">
+              <button onclick="startGame('human')">Start Game vs Human</button>
+              <button onclick="vsComputerMode()">Start Game vs Computer</button>
+          </div>
+        </div>
+
+
+        <div class="container game_box">
+          <div class="flex-container">
+              <div class="limelight-regular">Total Sheeps: <span id="total-sheeps">0</span></div>
+              <div class="limelight-regular highlight-turn">Current Turn: <span id="current-turn">SHEEPS</span></div>
+              <!--<div class="limelight-regular">Winner: <span id="winner">-</span></div> --->
+          </div>
+            <div class="flex-container">
+                <div id="game_board">
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script type="module" src="./scripts/game_layout.js"></script>
+    <script type="module" src="./scripts/helping_function.js"></script>
+    <script type="module" src="./scripts/game_logic.js"></script>
+
+
+</body>
+</html>

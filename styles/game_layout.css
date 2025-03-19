@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Limelight&family=Monsieur+La+Doulaise&display=swap');
+body{
+  background-color:#4d5152;
+  color:white;
+  padding:0px;
+  margin:0px;
+}
+.header_text{
+  margin-top: 5px;
+}
+
+.limelight-regular {
+  font-family: "Limelight", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 32px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 10px;
+  padding: 20px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.fascinate-inline-regular {
+  font-family: "Fascinate Inline", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 32px;
+}
+
+
+.icon_wrapper {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(77, 81, 82, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
+  position:absolute;
+  top: -25px;
+  left: -20px;
+  border-radius:50px;
+
+}
+
+.icon_image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.game_box{
+  display: none;
+}
+
+.green-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #8ae78c;
+  border-radius: 50%;
+}
+
+
+
+.highlight-turn {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.sheep-turn {
+    background-color: rgba(30, 144, 255, 0.8); /* DodgerBlue */
+    animation: pulse 1s infinite alternate;
+}
+
+/* 🐅 Orange for Tiger's Turn */
+.tiger-turn {
+    background-color: rgba(247, 149, 52, 0.8); /* Tiger Orange */
+    animation: pulse 1s infinite alternate;
+}
+
+/* 🌀 Pulsing Animation */
+@keyframes pulse {
+    from {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+    to {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+    }
+}
+
+
+
+.game-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 50px;
+      }
+.menu {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          background-color: #f4f4f4;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.menu button {
+          padding: 10px 20px;
+          font-size: 18px;
+          cursor: pointer;
+          border: none;
+          border-radius: 5px;
+          background-color: #007bff;
+          color: white;
+  }
+.menu button:hover {
+          background-color: #0056b3;
+  }
