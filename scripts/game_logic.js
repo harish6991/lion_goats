@@ -16,11 +16,16 @@ export function playerTurn(turn,game_section) {
 
     turnElement.innerHTML = turn;
 
+    if(sheeps.length === 1){ console.log("Lions has win") }
+
     if (turn === "SHEEPS") {
+        const randomIndex = Math.floor(Math.random() * sheeps.length);
+        sheeps[randomIndex].style.backgroundColor = "blue"
         turnElement.classList.add("sheep-turn");
         sheepTurns(sheeps,game_section,turn)
         // console.log("Sheeps Turn");
     } else {
+        tigers[0].style.backgroundColor = "rgba(247, 149, 52, 0.8)"
         turnElement.classList.add("tiger-turn");
         tigerTurn(tigers,game_section,turn)
         // console.log("Other Turn");
