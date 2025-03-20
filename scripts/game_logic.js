@@ -12,11 +12,19 @@ export function playerTurn(turn,game_section) {
     let tigers = document.querySelectorAll(".tiger");
     let turnElement = document.querySelector("#current-turn");
     turnElement.classList.remove("sheep-turn", "tiger-turn");
-    document.querySelector("#total-sheeps").innerHTML = sheeps.length
+    document.querySelector("#total-sheeps").innerHTML = sheeps.length;
 
     turnElement.innerHTML = turn;
 
-    if(sheeps.length === 1){ console.log("Lions has win") }
+
+        if (sheeps.length === 1) {
+        let restart = confirm("Lions have won! Do you want to play again?");
+        if (restart) {
+          document.querySelector('.game-container').style.display ="block";
+          document.querySelector('.container').classList.toggle('game_box');
+          location.reload()
+        }
+      }
 
     if (turn === "SHEEPS") {
         const randomIndex = Math.floor(Math.random() * sheeps.length);

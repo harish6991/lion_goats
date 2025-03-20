@@ -190,69 +190,50 @@ function greenDotFunction(){
 
 // lions move
 
-export function calculateTigerMove(selectedDiv,game_section,turn) {
-//filter out the
-let selectedIndex = game_section.indexOf(selectedDiv);
-let selectedTiger = game_section[selectedIndex];
-// let weak_point_sheep = vulnerable_point.map((item_idx) => game_section[item_idx]).filter((element) => element.querySelector(".icon_wrapper.sheeps"));
+export function calculateTigerMove(selectedDiv, game_section, turn) {
+    let selectedIndex = game_section.indexOf(selectedDiv);
+    let selectedTiger = game_section[selectedIndex];
 
+    // Define tiger moves
+    let tigerMoves = [
+        { tiger: 9, sheep: 8, empty: 5 },
+        { tiger: 9, sheep: 7, empty: 4 },
+        { tiger: 7, sheep: 6, empty: 8 },
+        { tiger: 8, sheep: 6, empty: 7 },
+        { tiger: 4, sheep: 3, empty: 5 },
+        { tiger: 5, sheep: 3, empty: 4 },
+        { tiger: 5, sheep: 8, empty: 9 },
+        { tiger: 4, sheep: 7, empty: 9 }
+    ];
 
-
-if (game_section[9].querySelector(".icon_wrapper.tiger")) {
-    // if 8 contains the sheep & 5 is empty
-    if (game_section[8].querySelector(".icon_wrapper.sheeps") && !game_section[5].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[8], game_section[5]);
-        makeAMoveEliminate(game_section[5], selectedDiv, activeLine, game_section[8],game_section,turn);
-
-    }
-    // if 7 contains the sheep & 4 is empty
-    if (game_section[7].querySelector(".icon_wrapper.sheeps") && !game_section[4].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[7], game_section[4]);
-        makeAMoveEliminate(game_section[4], selectedDiv, activeLine, game_section[7],game_section,turn);
-    }
-}
-
-if (game_section[7].querySelector(".icon_wrapper.tiger")) {
-    // if 6 contains the sheep & 8 is empty
-    if (game_section[6].querySelector(".icon_wrapper.sheeps") && !game_section[8].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[6], game_section[8]);
-        makeAMoveEliminate(game_section[8], selectedDiv, activeLine, game_section[6],game_section,turn);
-    }
-}
-
-if (game_section[8].querySelector(".icon_wrapper.tiger")) {
-    // if 5 contains the sheep & 7 is empty
-    if (game_section[6].querySelector(".icon_wrapper.sheeps") && !game_section[7].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[6], game_section[7]);
-        makeAMoveEliminate(game_section[7], selectedDiv, activeLine, game_section[8],game_section,turn);
-    }
-}
-
-if (game_section[4].querySelector(".icon_wrapper.tiger")) {
-    // if 3 contains the sheep & 5 is empty
-    if (game_section[3].querySelector(".icon_wrapper.sheeps") && !game_section[5].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[3], game_section[5]);
-        makeAMoveEliminate(game_section[5], selectedDiv, activeLine, game_section[3],game_section,turn);
-    }
-}
-
-if (game_section[5].querySelector(".icon_wrapper.tiger")) {
-    // if 3 contains the sheep & 4 is empty
-    if (game_section[3].querySelector(".icon_wrapper.sheeps") && !game_section[4].querySelector(".icon_wrapper.sheeps")) {
-        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[3], game_section[4]);
-        makeAMoveEliminate(game_section[4], selectedDiv, activeLine, game_section[3],game_section,turn);
-    }
-}
-
-    // if (!movementMap[selectedIndex]) return;
-    movementMap[selectedIndex].forEach((targetIndex) => {
-      let targetDiv = game_section[targetIndex];
-      if (!targetDiv.querySelector(".icon_wrapper.sheeps")) {
-          let activeLine = drawLineBetweenDivs(selectedTiger, targetDiv);
-          makeAMove(targetDiv, selectedTiger, activeLine,turn,game_section)
-
-      }
+    // Execute tiger jumps
+    tigerMoves.forEach(({ tiger, sheep, empty }) => {
+        attemptTigerJump(game_section, selectedDiv, tiger, sheep, empty, turn);
     });
+
+    // Handle normal movement
+    if (movementMap[selectedIndex]) {
+        movementMap[selectedIndex].forEach((targetIndex) => {
+            let targetDiv = game_section[targetIndex];
+            if (!targetDiv.querySelector(".icon_wrapper.sheeps")) {
+                let activeLine = drawLineBetweenDivs(selectedTiger, targetDiv);
+                makeAMove(targetDiv, selectedTiger, activeLine, turn, game_section);
+            }
+        });
+    }
+
+}
+
+// Function to attempt a tiger jump
+function attemptTigerJump(game_section, selectedDiv, tigerIndex, sheepIndex, emptyIndex, turn) {
+    if (
+        game_section[tigerIndex].querySelector(".icon_wrapper.tiger") &&
+        game_section[sheepIndex].querySelector(".icon_wrapper.sheeps") &&
+        !game_section[emptyIndex].querySelector(".icon_wrapper.sheeps")
+    ) {
+        let activeLine = drawLineForCuttingSheep(selectedDiv, game_section[sheepIndex], game_section[emptyIndex]);
+        makeAMoveEliminate(game_section[emptyIndex], selectedDiv, activeLine, game_section[sheepIndex], game_section, turn);
+    }
 }
 
 
