@@ -3,106 +3,90 @@ import { calculateGoatMove, calculateTigerMove, checkTigerIsCaught } from './hel
 let selectedSheep = null;
 let selectedTiger = null;
 
-
-export function playerTurn(turn,game_section) {
-  // Selection of players
-    // Select all sheeps and tigers
+export function playerTurn(turn, game_section) {
     removeEventListeners(game_section);
-    let sheeps = document.querySelectorAll(".sheeps");
-    let tigers = document.querySelectorAll(".tiger");
-    let turnElement = document.querySelector("#current-turn");
-    turnElement.classList.remove("sheep-turn", "tiger-turn");
-    document.querySelector("#total-sheeps").innerHTML = sheeps.length;
-
-    if (checkTigerIsCaught(game_section)) {
-      setTimeout(() => {
-        let restart = confirm("Goats have won! Do you want to play again?");
-        if (restart) {
-          // document.querySelector('.game-container').style.display = "block";
-          // document.querySelector('.container').classList.toggle('game_box');
-          location.reload();
-        }
-      }, 500);
-    }
-    turnElement.innerHTML = turn;
-
-        if (sheeps.length === 1) {
-        let restart = confirm("Lions have won! Do you want to play again?");
-        if (restart) {
-          // document.querySelector('.game-container').style.display ="block";
-          // document.querySelector('.container').classList.toggle('game_box');
-          location.reload()
-        }
-      }
-
-    if (turn === "SHEEPS") {
-        const randomIndex = Math.floor(Math.random() * sheeps.length);
-        sheeps[randomIndex].style.backgroundColor = "blue"
-        turnElement.classList.add("sheep-turn");
-        sheepTurns(sheeps,game_section,turn)
-        // console.log("Sheeps Turn");
-    } else {
-        tigers[0].style.backgroundColor = "rgba(247, 149, 52, 0.8)"
-        turnElement.classList.add("tiger-turn");
-        tigerTurn(tigers,game_section,turn)
-        // console.log("Other Turn");
-    }
+    updateTurnDisplay(turn);
+    checkGameOverConditions(game_section);
+    assignTurnActions(turn, game_section);
 }
-
-
 
 function removeEventListeners(game_sections) {
     game_sections.forEach((section, index) => {
-        // Remove all elements with class "green_dot"
         section.querySelectorAll(".green_dot").forEach((dot) => dot.remove());
-
-        // Clone the section to remove existing event listeners
         let newSection = section.cloneNode(true);
         section.replaceWith(newSection);
-        game_sections[index] = newSection; // Update reference in the array
+        game_sections[index] = newSection;
     });
 }
 
-
-// Handling sheep selection
-
-function sheepTurns(sheeps,game_section,turn){
-  sheeps.forEach((sheep) => {
-    sheep.addEventListener("click", function () {
-
-      // Prevent re-running if the same sheep is clicked
-      if (selectedSheep === this) return;
-
-      // Reset previous sheep selections
-      sheeps.forEach((s) => (s.style.backgroundColor = `rgba(77, 81, 82, 0.8)`));
-
-      // Select new sheep
-      selectedSheep = this;
-      selectedTiger = null; // Deselect tiger if a sheep is selected
-      this.style.backgroundColor = "blue";
-      calculateGoatMove(this.parentNode,game_section,turn);
-    });
-
-  });
-
+function updateTurnDisplay(turn) {
+    let turnElement = document.querySelector("#current-turn");
+    turnElement.classList.remove("sheep-turn", "tiger-turn");
+    turnElement.innerHTML = turn;
+    document.querySelector("#total-sheeps").innerHTML = document.querySelectorAll(".sheeps").length;
 }
-function tigerTurn(tigers,game_section,turn){
-  // Handling tiger selection
-  tigers.forEach((tiger) => {
-    tiger.addEventListener("click", function () {
-      // Prevent re-running if the same tiger is clicked
-      if (selectedTiger === this) return;
 
-      // Reset previous tiger selections
-      tigers.forEach((t) => (t.style.backgroundColor = ""));
+function checkGameOverConditions(game_section) {
+    if (checkTigerIsCaught(game_section)) {
+        setTimeout(() => {
+            if (confirm("Goats have won! Do you want to play again?")) {
+                location.reload();
+            }
+        }, 500);
+    }
+    if (document.querySelectorAll(".sheeps").length === 1) {
+        if (confirm("Lions have won! Do you want to play again?")) {
+            location.reload();
+        }
+    }
+}
 
-      // Select new tiger
-      selectedTiger = this;
-      selectedSheep = null; // Deselect sheep if a tiger is selected
-      this.style.backgroundColor = `rgba(247, 149, 52, 0.8)`;
-      calculateTigerMove(this.parentNode,game_section,turn);
+function assignTurnActions(turn, game_section) {
+    if (turn === "SHEEPS") {
+        handleSheepTurn(game_section);
+    } else {
+        handleTigerTurn(game_section);
+    } checkGameOverConditions
+}
+
+function handleSheepTurn(game_section) {
+    let sheeps = document.querySelectorAll(".sheeps");
+    if (sheeps.length === 0) return;
+    sheeps[Math.floor(Math.random() * sheeps.length)].style.backgroundColor = "blue";
+    document.querySelector("#current-turn").classList.add("sheep-turn");
+    enableSheepSelection(sheeps, game_section);
+}
+
+function handleTigerTurn(game_section) {
+    let tigers = document.querySelectorAll(".tiger");
+    if (tigers.length === 0) return;
+    tigers[0].style.backgroundColor = "rgba(247, 149, 52, 0.8)";
+    document.querySelector("#current-turn").classList.add("tiger-turn");
+    enableTigerSelection(tigers, game_section);
+}
+
+function enableSheepSelection(sheeps, game_section) {
+    sheeps.forEach((sheep) => {
+        sheep.addEventListener("click", function () {
+            if (selectedSheep === this) return;
+            sheeps.forEach((s) => (s.style.backgroundColor = "rgba(77, 81, 82, 0.8)"));
+            selectedSheep = this;
+            selectedTiger = null;
+            this.style.backgroundColor = "blue";
+            calculateGoatMove(this.parentNode, game_section, "SHEEPS");
+        });
     });
-  });
+}
 
-
+function enableTigerSelection(tigers, game_section) {
+    tigers.forEach((tiger) => {
+        tiger.addEventListener("click", function () {
+            if (selectedTiger === this) return;
+            tigers.forEach((t) => (t.style.backgroundColor = ""));
+            selectedTiger = this;
+            selectedSheep = null;
+            this.style.backgroundColor = "rgba(247, 149, 52, 0.8)";
+            calculateTigerMove(this.parentNode, game_section, "TIGERS");
+        });
+    });
 }
