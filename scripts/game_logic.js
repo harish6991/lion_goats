@@ -18,8 +18,8 @@ export function playerTurn(turn,game_section) {
       setTimeout(() => {
         let restart = confirm("Goats have won! Do you want to play again?");
         if (restart) {
-          document.querySelector('.game-container').style.display = "block";
-          document.querySelector('.container').classList.toggle('game_box');
+          // document.querySelector('.game-container').style.display = "block";
+          // document.querySelector('.container').classList.toggle('game_box');
           location.reload();
         }
       }, 500);
@@ -29,8 +29,8 @@ export function playerTurn(turn,game_section) {
         if (sheeps.length === 1) {
         let restart = confirm("Lions have won! Do you want to play again?");
         if (restart) {
-          document.querySelector('.game-container').style.display ="block";
-          document.querySelector('.container').classList.toggle('game_box');
+          // document.querySelector('.game-container').style.display ="block";
+          // document.querySelector('.container').classList.toggle('game_box');
           location.reload()
         }
       }
