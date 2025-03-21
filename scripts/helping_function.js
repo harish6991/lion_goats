@@ -278,3 +278,15 @@ function makeAMoveEliminate(boxClicked, previousBox, line,sheep_found,game_secti
   // Store the newly drawn line
   if (line.line) activeLines.push(line.line);
 }
+
+
+export function checkTigerIsCaught(game_section) {
+  return isTigerTrapped(game_section, [3], [4, 5]) || isTigerTrapped(game_section, [6], [7, 8, 9]);
+}
+
+function isTigerTrapped(game_section, tigerPositions, sheepPositions) {
+  return (
+    tigerPositions.every(pos => game_section[pos]?.querySelector(".icon_wrapper.tiger")) &&
+    sheepPositions.every(pos => game_section[pos]?.querySelector(".icon_wrapper.sheeps"))
+  );
+}

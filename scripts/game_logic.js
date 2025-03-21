@@ -1,4 +1,4 @@
-import { calculateGoatMove, calculateTigerMove } from './helping_function.js';
+import { calculateGoatMove, calculateTigerMove, checkTigerIsCaught } from './helping_function.js';
 
 let selectedSheep = null;
 let selectedTiger = null;
@@ -14,8 +14,17 @@ export function playerTurn(turn,game_section) {
     turnElement.classList.remove("sheep-turn", "tiger-turn");
     document.querySelector("#total-sheeps").innerHTML = sheeps.length;
 
+    if (checkTigerIsCaught(game_section)) {
+      setTimeout(() => {
+        let restart = confirm("Goats have won! Do you want to play again?");
+        if (restart) {
+          document.querySelector('.game-container').style.display = "block";
+          document.querySelector('.container').classList.toggle('game_box');
+          location.reload();
+        }
+      }, 500);
+    }
     turnElement.innerHTML = turn;
-
 
         if (sheeps.length === 1) {
         let restart = confirm("Lions have won! Do you want to play again?");
