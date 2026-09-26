@@ -1,7 +1,8 @@
 import { calculateGoatMove, calculateTigerMove, checkTigerIsCaught } from './helping_function.js';
-
-let selectedSheep = null;
-let selectedTiger = null;
+import { playingAsTiger } from './playAsTiger.js'
+var computerPlayer = "TIGER"
+var selectedSheep = null;
+var selectedTiger = null;
 
 export function playerTurn(turn, game_section) {
     removeEventListeners(game_section);
@@ -45,8 +46,11 @@ function assignTurnActions(turn, game_section) {
     if (turn === "SHEEPS") {
         handleSheepTurn(game_section);
     } else {
+        if(computerPlayer === "TIGER"){
+          playingAsTiger(game_section ,"TIGER")
+        }
         handleTigerTurn(game_section);
-    } checkGameOverConditions
+    }
 }
 
 function handleSheepTurn(game_section) {
@@ -86,7 +90,7 @@ function enableTigerSelection(tigers, game_section) {
             selectedTiger = this;
             selectedSheep = null;
             this.style.backgroundColor = "rgba(247, 149, 52, 0.8)";
-            calculateTigerMove(this.parentNode, game_section, "TIGERS");
+            calculateTigerMove(this.parentNode, game_section, "TIGER");
         });
     });
 }
