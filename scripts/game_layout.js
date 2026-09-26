@@ -1,14 +1,21 @@
-import { playerTurn } from "./game_logic.js";
+import { playerTurn, setComputerPlayer } from "./game_logic.js";
 
 let game_board = document.querySelector("#game_board")
 let game_section = [];
 let turnInit  = "SHEEPS";
 
-function vsComputerMode(){
-    alert("will be avilable soon working on it")
-}
-
 function startGame(mode) {
+      const roleLabel = document.querySelector("#role-label");
+      if (mode === "tiger") {
+        setComputerPlayer("SHEEPS");
+        roleLabel.textContent = "You: Tiger · Computer: Sheep";
+      } else if (mode === "goat") {
+        setComputerPlayer("TIGER");
+        roleLabel.textContent = "You: Sheep · Computer: Tiger";
+      } else {
+        setComputerPlayer(null);
+        roleLabel.textContent = "Two players";
+      }
       document.querySelector('.game-container').style.display ="none";
       document.querySelector('.container').classList.toggle('game_box');
       initGame()

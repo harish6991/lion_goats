@@ -1,13 +1,26 @@
 import { calculateGoatMove, calculateTigerMove, checkTigerIsCaught } from './helping_function.js';
-import { playingAsTiger } from './playAsTiger.js'
-var computerPlayer = "TIGER"
+import { playingAsTiger } from './playAsTiger.js';
+import { playingAsGoat } from './playedAsGoat.js';
+import { noteBoard, resetComputerMemory } from './computer_ai.js';
+
+let computerPlayer = null;
+let gameFinished = false;
 var selectedSheep = null;
 var selectedTiger = null;
 
+export function setComputerPlayer(side) {
+    computerPlayer = side;
+    gameFinished = false;
+    resetComputerMemory();
+}
+
 export function playerTurn(turn, game_section) {
+    selectedSheep = null;
+    selectedTiger = null;
     removeEventListeners(game_section);
     updateTurnDisplay(turn);
-    checkGameOverConditions(game_section);
+    noteBoard(game_section);
+    if (isGameOver(game_section)) return;
     assignTurnActions(turn, game_section);
 }
 
@@ -23,34 +36,55 @@ function removeEventListeners(game_sections) {
 function updateTurnDisplay(turn) {
     let turnElement = document.querySelector("#current-turn");
     turnElement.classList.remove("sheep-turn", "tiger-turn");
-    turnElement.innerHTML = turn;
+    turnElement.classList.add(turn === "SHEEPS" ? "sheep-turn" : "tiger-turn");
+    turnElement.innerHTML = computerPlayer === turn ? `${turn} · Computer` : turn;
     document.querySelector("#total-sheeps").innerHTML = document.querySelectorAll(".sheeps").length;
 }
 
-function checkGameOverConditions(game_section) {
+function isGameOver(game_section) {
+    if (gameFinished) return true;
     if (checkTigerIsCaught(game_section)) {
-        setTimeout(() => {
-            if (confirm("Goats have won! Do you want to play again?")) {
-                location.reload();
-            }
-        }, 500);
+        gameFinished = true;
+        announce("Goats have won! Do you want to play again?");
+        return true;
     }
     if (document.querySelectorAll(".sheeps").length === 1) {
-        if (confirm("Lions have won! Do you want to play again?")) {
-            location.reload();
-        }
+        gameFinished = true;
+        announce("Lions have won! Do you want to play again?");
+        return true;
     }
+    return false;
+}
+
+function announce(message) {
+    setTimeout(() => {
+        if (confirm(message)) location.reload();
+    }, 350);
 }
 
 function assignTurnActions(turn, game_section) {
-    if (turn === "SHEEPS") {
-        handleSheepTurn(game_section);
-    } else {
-        if(computerPlayer === "TIGER"){
-          playingAsTiger(game_section ,"TIGER")
-        }
-        handleTigerTurn(game_section);
+    const board = document.querySelector("#game_board");
+    if (computerPlayer === turn) {
+        if (board) board.style.pointerEvents = "none";
+        window.setTimeout(() => {
+            if (gameFinished) return;
+            const moved = turn === "TIGER"
+                ? playingAsTiger(game_section)
+                : playingAsGoat(game_section);
+            if (!moved) {
+                gameFinished = true;
+                announce(turn === "TIGER"
+                    ? "Goats have won! Do you want to play again?"
+                    : "Lions have won! Do you want to play again?");
+                return;
+            }
+            playerTurn(turn === "TIGER" ? "SHEEPS" : "TIGER", game_section);
+        }, 500);
+        return;
     }
+    if (board) board.style.pointerEvents = "auto";
+    if (turn === "SHEEPS") handleSheepTurn(game_section);
+    else handleTigerTurn(game_section);
 }
 
 function handleSheepTurn(game_section) {

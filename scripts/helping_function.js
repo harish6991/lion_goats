@@ -1,18 +1,6 @@
 // function to calculate the distance between two point
 import { playerTurn } from "./game_logic.js";
-// possible goat moves
-const movementMap = {
-    0: [1],
-    1: [0, 2, 3],
-    2: [1],
-    3: [4, 5],
-    4: [3, 7],
-    5: [3, 8],
-    6: [7, 8, 9],
-    7: [4, 6, 9],
-    8: [5, 6, 9],
-    9: [6, 7, 8],
-};
+import { movementMap, tigerJumps, tigerIsCaught } from "./board_rules.js";
 
 
 let activeLines = [];
@@ -194,20 +182,8 @@ export function calculateTigerMove(selectedDiv, game_section, turn) {
     let selectedIndex = game_section.indexOf(selectedDiv);
     let selectedTiger = game_section[selectedIndex];
 
-    // Define tiger moves
-    let tigerMoves = [
-        { tiger: 9, sheep: 8, empty: 5 },
-        { tiger: 9, sheep: 7, empty: 4 },
-        { tiger: 7, sheep: 6, empty: 8 },
-        { tiger: 8, sheep: 6, empty: 7 },
-        { tiger: 4, sheep: 3, empty: 5 },
-        { tiger: 5, sheep: 3, empty: 4 },
-        { tiger: 5, sheep: 8, empty: 9 },
-        { tiger: 4, sheep: 7, empty: 9 }
-    ];
-
     // Execute tiger jumps
-    tigerMoves.forEach(({ tiger, sheep, empty }) => {
+    tigerJumps.forEach(({ tiger, sheep, empty }) => {
         attemptTigerJump(game_section, selectedDiv, tiger, sheep, empty, turn);
     });
 
@@ -281,12 +257,11 @@ function makeAMoveEliminate(boxClicked, previousBox, line,sheep_found,game_secti
 
 
 export function checkTigerIsCaught(game_section) {
-  return isTigerTrapped(game_section, [3], [4, 5]) || isTigerTrapped(game_section, [6], [7, 8, 9]);
-}
-
-function isTigerTrapped(game_section, tigerPositions, sheepPositions) {
-  return (
-    tigerPositions.every(pos => game_section[pos]?.querySelector(".icon_wrapper.tiger")) &&
-    sheepPositions.every(pos => game_section[pos]?.querySelector(".icon_wrapper.sheeps"))
-  );
+  let tigerPos = -1;
+  const sheepPositions = [];
+  game_section.forEach((section, index) => {
+    if (section.querySelector(".icon_wrapper.tiger")) tigerPos = index;
+    if (section.querySelector(".icon_wrapper.sheeps")) sheepPositions.push(index);
+  });
+  return tigerIsCaught(tigerPos, sheepPositions);
 }

@@ -37,6 +37,12 @@ body{
   font-size: 32px;
 }
 
+.role-label {
+  font-family: "Limelight", sans-serif;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
 
 .icon_wrapper {
   width: 50px;
